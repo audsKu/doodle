@@ -1,63 +1,37 @@
+TIMESLOTS = {
+  'a' => 'in the morning',
+  'b' => 'lunch',
+  'c' => 'after lunch 1-5pm',
+  'd' => 'supper',
+  'e' => 'after supper 6pm until whenever'
+}
+
+ACTIVITIES = {
+  :food => %w(b d),
+  :mahjong => %w(a c e)
+}
+
 class Saturday
   def self.when? (options = {})
-    schedule = "Alistair is available for"
-    schedule << "a game in these times, #{options[:game_time].schedule} " if options[:game_time].schedule != ''
-    schedule << "some good food at these times, #{options[:yum_time].schedule} " if options[:yum_time].schedule != ''
+    schedule = "Alistair is available for\n"
+    schedule << "a game in these times: #{options[:game_time]}\n" if options[:game_time]
+    schedule << "some good food at these times: #{options[:yum_time]} " if options[:yum_time]
     schedule << "none of these time" if !options[:game_time] && !options[:yum_time]
     schedule
   end
 end
 
-class GoodTime
-  def initialize(response)
-    @response = response.split(',')
-  end
-
-  def schedule
-    available_time.select { |key, value|
-      @response.include? key
-    }.
-      values.
-      join(",")
-  end
-
-  private
-    def available_time
-      raise NotImplementedError
-    end
-end
-
-class MahJongTime < GoodTime
-  private
-  def available_time
-    {
-     'a' => 'in the morning',
-     'c' => 'in the afternoon',
-     'e' => 'in the evening'
-    }
-  end
-end
-
-class FoodTime < GoodTime
-  private
-  def available_time
-    {
-     'b' => 'for lunch',
-     'd' => 'for supper'
-    }
-  end
+def availability(activity, response)
+  response.split(',').map { |choice| TIMESLOTS[choice] }.join(', ')
 end
 
 if __FILE__ == $0
-  print "Pick all that apply (a,b,c,d,or e). Are you available
-  (a) in the morning
-  (b) for lunch
-  (c) after lunch 1-5pm
-  (d) for supper
-  (e) after supper 6-whenever"
+  options = TIMESLOTS.keys.join(',')
+  print "Pick all that apply (#{options}. Are you available"
+  TIMESLOTS.each_pair do |choice, description|
+    print "(#{choice}) #{description}"
+  end
 
   alistair_response = gets.chomp
-  @game_time = MahJongTime.new(alistair_response)
-  @yum_time = FoodTime.new(alistair_responses)
-  Saturday.when? :game_time => @game_time, :yum_time => @yum_time
+  Saturday.when?(alistair_response)
 end
