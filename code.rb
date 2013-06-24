@@ -12,17 +12,24 @@ ACTIVITIES = {
 }
 
 class Saturday
-  def self.when? (options = {})
+  def self.when?(response)
     schedule = "Alistair is available for\n"
-    schedule << "a game in these times: #{options[:game_time]}\n" if options[:game_time]
-    schedule << "some good food at these times: #{options[:yum_time]} " if options[:yum_time]
-    schedule << "none of these time" if !options[:game_time] && !options[:yum_time]
+    ACTIVITIES.keys.each do |activity|
+      availability = availability(activity, response)
+      schedule << "#{activity} at these times: #{availability}\n" if availability
+    end
     schedule
   end
-end
 
-def availability(activity, response)
-  response.split(',').map { |choice| TIMESLOTS[choice] }.join(', ')
+  private
+    def self.availability(activity, response)
+      availability = response.split(',').map do |choice|
+        if ACTIVITIES[activity].include?(choice)
+          TIMESLOTS[choice]
+        end
+      end
+      availability.delete_if(&:nil?).join(', ')
+    end
 end
 
 if __FILE__ == $0
