@@ -13,7 +13,8 @@ ACTIVITIES = {
 
 class Saturday
   def self.when?(response)
-    schedule = "Alistair is available for\n"
+    schedule =  "=================================\n\n"
+    schedule << "Alistair, you are available for\n"
     ACTIVITIES.keys.each do |activity|
       availability = availability(activity, response)
       schedule << "#{activity} at these times: #{availability}\n" if availability
@@ -34,11 +35,11 @@ end
 
 if __FILE__ == $0
   options = TIMESLOTS.keys.join(',')
-  print "Pick all that apply (#{options}. Are you available"
+  print "Pick all that apply (#{options}). Are you available\n"
   TIMESLOTS.each_pair do |choice, description|
-    print "(#{choice}) #{description}"
+    print "(#{choice}) #{description} \n"
   end
-
+  print "Enter your choice here: "
   alistair_response = gets.chomp
-  Saturday.when?(alistair_response)
+  print Saturday.when?(alistair_response)
 end

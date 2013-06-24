@@ -1,17 +1,15 @@
-Doodle
+Test-driven doodle
 ======
 
-Manage scheduling with friends. Completed with tests.
+Manage scheduling with friends.
 
 Usage
 ======
 
 1. Change to saturday directory
-
         ruby code.rb
 
 1. You will be prompt with
-
         Pick all that apply (a,b,c,d,e). Are you available
         (a) in the morning
         (b) lunch
